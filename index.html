@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
-    <title>Document</title>
+    <title>Calculator</title>
 </head>
 <body>
    <div class="calculator">
@@ -13,6 +13,8 @@
             <p class="display">0</p>
         </div>
         <div class="digits">
+            <button id="(" class="input button" data-key="BracketLeft">(</button>
+            <button id=")" class="input button" data-key="BracketRight">)</button>
             <button id="0" class="input button" data-key="Digit0">0</button>
             <button id="1" class="input button" data-key="Digit1">1</button>
             <button id="2" class="input button" data-key="Digit2">2</button>
@@ -32,6 +34,8 @@
             <button id="-" class="input button" data-key="Minus">-</button>
             <button id="*" class="input button" data-key="KeyX">×</button>
             <button id="/" class="input button" data-key="Slash">÷</button>
+            <button id="**" class="input button" data-key="ArrowUp">^</button>
+            <button id="sqrt" class="input button" data-key="ArrowDown">√</button>
             <button id="equals" data-key="Enter" class="button">=</button>
         </div>
    </div> 

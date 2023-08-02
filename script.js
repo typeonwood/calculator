@@ -1,27 +1,25 @@
-const add = (num1, num2) => num1 + num2
-
-const subtract = (num1, num2) => num1 - num2
-
-const multiply = (num1, num2) => num1 * num2
-
-const divide = (num1, num2) => num1 / num2;
-
 let num1
 let num2
 let operator
 
 function operate(num1, operator, num2) {
-    if (operator === '+') {
-        return add(num1, num2)
+    if (operator === 'sqrt') {
+        return Math.sqrt(num2)
+    }
+    else if (operator === '**') {
+        return num1**num2
+    }
+    else if (operator === '+') {
+        return num1 + num2
     }
     else if (operator === '-') {
-        return subtract(num1, num2)
+        return num1 - num2
     }
     else if (operator === '*') {
-        return multiply(num1, num2)
+        return num1 * num2
     }
     else if (operator === '/') {
-        return divide(num1, num2) 
+        return num1 / num2
     }
 }
 
@@ -31,8 +29,9 @@ let displayText = ''
 function displayInput(e) {
     let id = e.target.id
     let item
-    let last = input.length -1;
-    if (isFinite(Number(id)) || id === '.') {
+    let last = input.length - 1;
+    if (input.join('').length > 16) return 'too many digits'
+    else if (isFinite(Number(id)) || id === '.') {
         if (input[last] !== undefined) {
             if (isFinite(Number(input[last])) === true || input[last] === '.') {
                 item = input[last];
@@ -41,14 +40,23 @@ function displayInput(e) {
                 input.push(`${item}`)
             } else input.push(`${id}`);
         } else input.push(`${id}`);
-    } else input.push(`${id}`);
+    } 
+    else input.push(`${id}`);
     let inputString = input.join('');
-    displayText = inputString.replaceAll('*', ' × ').
-                        replaceAll('/', ' ÷ ').
-                        replaceAll('+', ' + ').
-                        replaceAll('-', ' - ');
+    displayText = inputString.replaceAll('**', '^').
+                              replaceAll('sqrt', '√').
+                              replaceAll('*', ' × ').
+                              replaceAll('/', ' ÷ ').
+                              replaceAll('+', ' + ').
+                              replaceAll('-', ' - ');
     const display = document.querySelector('.display');
     display.textContent = displayText;
+}
+
+function isPower(x) {
+    if (x === '**') return true
+    else if (x === 'sqrt') return true
+    else return false
 }
 
 function isMultiply(x) {
@@ -64,55 +72,100 @@ function isAdd(x) {
 }
 
 function isOperator(x) {
-    return isMultiply(x) || isAdd(x)
+    return isPower(x) || isMultiply(x) || isAdd(x)
     }
 
 let order;
 
-function orderOfOperations() {
+function orderOfOperations(exp) {
     order = [];
-    if (input.some(isMultiply)) {
-        input.forEach((item, i) => {
-            if (isMultiply(item) && !isMultiply(input[i - 2])) {
+    if (exp.some(isPower)) {
+        exp.forEach((item, i) => {
+            if (isPower(item) && !isPower(exp[i - 2])) {
+                order.push(i);
+            }
+        })
+    }
+    else if (exp.some(isMultiply)) {
+        exp.forEach((item, i) => {
+            if (isMultiply(item) && !isMultiply(exp[i - 2])) {
                 order.push(i);
             }
         })
     } else {
-        input.forEach((item, i) => {
-            if (isAdd(item) && !isAdd(input[i - 2])) {
+        exp.forEach((item, i) => {
+            if (isAdd(item) && !isAdd(exp[i - 2])) {
                 order.push(i)
             }
         })
     }
 }
 
-function calculate() {
+function solve(exp) {
+    let inputString = exp.join(',');
     const display = document.querySelector('.display');
-    const clearEntry = document.querySelector('#clear-entry');
-    clearEntry.removeEventListener('click', clear);
-    const inputButtons = document.querySelectorAll('.input');
-    inputButtons.forEach(button => {
-        button.removeEventListener('click', displayInput)
-    })  
-    let inputString = input.join(',')
-    while (input.some(isOperator) && display.textContent !== 'error') {
-        orderOfOperations();
+    while (exp.some(isOperator) && display.textContent !== 'error') {
+        orderOfOperations(exp);
         order.forEach(index => {
-            num1 = input[index - 1]
-            operator = input[index]
-            num2 = input[index + 1];
-            let result = operate(Number(num1), operator, Number(num2));
+            num1 = exp[index - 1]
+            operator = exp[index]
+            num2 = exp[index + 1]
+            let result;
+            if (operator === 'sqrt') {
+                result = operate(null, operator, Number(num2))
+            } else {
+                result = operate(Number(num1), operator, Number(num2));
+            }
             if (!isFinite(result)) {
-                input = [];
+                exp = [];
                 document.querySelector('.display').textContent = 'error';
                 return 'error'
             }
             let resultString = result.toString()
-            let expression = num1 + ',' + operator +  ',' + num2;
+            let expression;
+            if (operator === 'sqrt') {
+                expression = operator + ',' + num2
+            } else {
+                expression = num1 + ',' + operator +  ',' + num2
+            }
             inputString = inputString.replace(expression, resultString)
         })
-        input = inputString.split(',')
+        exp = inputString.split(',')
     }
+    return exp
+}
+
+function calculate() {
+    const display = document.querySelector('.display')
+    const clearEntry = document.querySelector('#clear-entry');
+    clearEntry.removeEventListener('click', clear)
+    const inputButtons = document.querySelectorAll('.input');
+    inputButtons.forEach(button => {
+        button.removeEventListener('click', displayInput)
+    })  
+    input.forEach((item, i) => {
+        if (item === 'sqrt' && isFinite(+input[i - 1])) {
+            display.textContent = 'error';
+            return 'error'
+            }
+    })
+    let inputString = input.join(',');
+    while (input.some(isOperator) && display.textContent !== 'error')
+        if (input.includes('(')) {
+            inputString = input.join(',');
+            let start = inputString.indexOf('(')
+            let end = inputString.indexOf(')');
+            let smallString = inputString.slice(start + 2, end - 1);
+            let smallInput = smallString.split(',');
+            smallInput = solve(smallInput);
+            let expression = inputString.slice(start, end + 1)
+            smallString = smallInput.join(',');
+            inputString = inputString.replace(expression, smallString);
+            input = inputString.split(',')
+        } 
+        else {
+            input = solve(input);
+        }
     if (display.textContent === 'error') return 'error'
     let answer = input.join('');
     if (answer.length > 16) {
@@ -168,7 +221,7 @@ clearAll.addEventListener('click', function() {
 
 function type(e) {
     const button = document.querySelector(`.button[data-key=${e.code}]`);
-    button.click()
+    if (button !== null) return button.click()
 }
 
 window.addEventListener('keydown', type)
