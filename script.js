@@ -19,6 +19,10 @@ function operate(num1, operator, num2) {
         return num1 * num2
     }
     else if (operator === '/') {
+        if (num2 == 0) {
+            alert('woah there! no dividing by 0!')
+            return 'error'
+        }
         return num1 / num2
     }
 }

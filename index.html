@@ -9,34 +9,52 @@
 </head>
 <body>
    <div class="calculator">
-        <div>
+        <div class="screen">
             <p class="display">0</p>
         </div>
-        <div class="digits">
-            <button id="(" class="input button" data-key="BracketLeft">(</button>
-            <button id=")" class="input button" data-key="BracketRight">)</button>
-            <button id="0" class="input button" data-key="Digit0">0</button>
-            <button id="1" class="input button" data-key="Digit1">1</button>
-            <button id="2" class="input button" data-key="Digit2">2</button>
-            <button id="3" class="input button" data-key="Digit3">3</button>
-            <button id="4" class="input button" data-key="Digit4">4</button>
-            <button id="5" class="input button" data-key="Digit5">5</button>
-            <button id="6" class="input button" data-key="Digit6">6</button>
-            <button id="7" class="input button" data-key="Digit7">7</button>
-            <button id="8" class="input button" data-key="Digit8">8</button>
-            <button id="9" class="input button" data-key="Digit9">9</button>
-        </div>
-        <div class="operators">
-            <button id="clear-all" data-key="ArrowLeft" class="button">AC</button>
-            <button id="clear-entry" data-key="Backspace" class="button">CE</button>
-            <button id="." class="input button" data-key="Period">.</button>
-            <button id="+" class="input button" data-key="Equal">+</button>
-            <button id="-" class="input button" data-key="Minus">-</button>
-            <button id="*" class="input button" data-key="KeyX">×</button>
-            <button id="/" class="input button" data-key="Slash">÷</button>
-            <button id="**" class="input button" data-key="ArrowUp">^</button>
-            <button id="sqrt" class="input button" data-key="ArrowDown">√</button>
-            <button id="equals" data-key="Enter" class="button">=</button>
+        <div class="buttons">
+            <div class="digits">
+                <div class="row">
+                    <button id="(" class="input button" data-key="BracketLeft">(</button>
+                    <button id=")" class="input button" data-key="BracketRight">)</button>
+                    <button id="0" class="input button" data-key="Digit0">0</button>
+                </div>
+                <div class="row">
+                    <button id="1" class="input button" data-key="Digit1">1</button>
+                    <button id="2" class="input button" data-key="Digit2">2</button>
+                    <button id="3" class="input button" data-key="Digit3">3</button>
+                </div>
+                <div class="row">
+                    <button id="4" class="input button" data-key="Digit4">4</button>
+                    <button id="5" class="input button" data-key="Digit5">5</button>
+                    <button id="6" class="input button" data-key="Digit6">6</button>
+                </div>
+                <div class="row">
+                    <button id="7" class="input button" data-key="Digit7">7</button>
+                    <button id="8" class="input button" data-key="Digit8">8</button>
+                    <button id="9" class="input button" data-key="Digit9">9</button>
+                </div>
+            </div>
+            <div class="operators">
+                <div class="row special">
+                    <button id="clear-all" data-key="ArrowLeft" class="button special">AC</button>
+                    <button id="clear-entry" data-key="Backspace" class="button special">CE</button>
+                </div>
+                <div class="row">
+                    <button id="+" class="input button" data-key="Equal">+</button>
+                    <button id="-" class="input button" data-key="Minus">-</button>
+                    <button id="*" class="input button" data-key="KeyX">×</button>
+                </div>
+                <div class="row">
+                    <button id="/" class="input button" data-key="Slash">÷</button>
+                    <button id="**" class="input button" data-key="ArrowUp">^</button>
+                    <button id="sqrt" class="input button" data-key="ArrowDown">√</button>
+                </div>
+                <div class="row special">
+                    <button id="." class="input button" data-key="Period">.</button>
+                    <button id="equals" data-key="Enter" class="button special">=</button>
+                </div>
+            </div>
         </div>
    </div> 
 </body>
