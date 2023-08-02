@@ -43,10 +43,10 @@ function displayInput(e) {
         } else input.push(`${id}`);
     } else input.push(`${id}`);
     let inputString = input.join('');
-    displayText = inputString.replace('*', ' × ').
-                        replace('/', ' ÷ ').
-                        replace('+', ' + ').
-                        replace('-', ' - ');
+    displayText = inputString.replaceAll('*', ' × ').
+                        replaceAll('/', ' ÷ ').
+                        replaceAll('+', ' + ').
+                        replaceAll('-', ' - ');
     const display = document.querySelector('.display');
     display.textContent = displayText;
 }
@@ -87,6 +87,7 @@ function orderOfOperations() {
 }
 
 function calculate() {
+    const display = document.querySelector('.display');
     const clearEntry = document.querySelector('#clear-entry');
     clearEntry.removeEventListener('click', clear);
     const inputButtons = document.querySelectorAll('.input');
@@ -94,19 +95,25 @@ function calculate() {
         button.removeEventListener('click', displayInput)
     })  
     let inputString = input.join(',')
-    while (input.some(isOperator)) {
+    while (input.some(isOperator) && display.textContent !== 'error') {
         orderOfOperations();
         order.forEach(index => {
             num1 = input[index - 1]
             operator = input[index]
             num2 = input[index + 1];
             let result = operate(Number(num1), operator, Number(num2));
+            if (!isFinite(result)) {
+                input = [];
+                document.querySelector('.display').textContent = 'error';
+                return 'error'
+            }
             let resultString = result.toString()
             let expression = num1 + ',' + operator +  ',' + num2;
             inputString = inputString.replace(expression, resultString)
         })
         input = inputString.split(',')
     }
+    if (display.textContent === 'error') return 'error'
     let answer = input.join('');
     if (answer.length > 16) {
         if (answer[15] !== '.' && answer[16] !== '.') {
@@ -124,7 +131,6 @@ function calculate() {
             answer = answer.slice(0, 16)
         }
     } 
-    const display = document.querySelector('.display');
     display.textContent = answer
 }
 
@@ -143,7 +149,7 @@ function clear() {
     if (displayText[lastEntry] === ' ') lastEntry = lastEntry - 2;
     displayText = displayText.slice(0, lastEntry);
     document.querySelector('.display').textContent = displayText;
-    let inputString = displayText.replace(' × ', ' * ').replace(' ÷ ', ' / ');
+    let inputString = displayText.replaceAll(' × ', ' * ').replaceAll(' ÷ ', ' / ');
     input = inputString.split(' ')
 }
 
@@ -159,6 +165,13 @@ clearAll.addEventListener('click', function() {
     activateClearEntry();
     activateInputButtons()
 })
+
+function type(e) {
+    const button = document.querySelector(`.button[data-key=${e.code}]`);
+    button.click()
+}
+
+window.addEventListener('keydown', type)
 
 activateClearEntry()
 activateInputButtons()
