@@ -5,9 +5,15 @@ html, body {
 
 body {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     margin: 0px;
+    background-color: rgb(67, 64, 77);
+}
+
+h1 {
+    color: rgb(204, 208, 217);
 }
 
 .calculator {
@@ -53,7 +59,7 @@ body {
 }
 
 .digits, .operators {
-    width: 45%;
+    width: 47%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -110,4 +116,11 @@ body {
 
 .button.special:hover {
     background-color: rgb(204, 55, 120);
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75px;
 }

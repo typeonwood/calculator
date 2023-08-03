@@ -55,6 +55,7 @@ function displayInput(e) {
     let last = input.length - 1;
     if (input.length == 1 && input[0] == 0) input = [];
     if (input.join('').length > 16) return 'too many digits'
+    if (id === '.' && input[last].includes('.')) return
     else if (isFinite(Number(id)) || id === '.') {
         if (input[last] !== undefined) {
             if (isFinite(Number(input[last])) === true || input[last] === '.') {
